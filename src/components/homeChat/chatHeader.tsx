@@ -4,7 +4,7 @@ import { Chat } from '../../utils/types';
 function ChatHeader({userChatData}:{userChatData:Chat}) {
 
     return (
-        <div className="d-flex flex-row align-items-center gap-3 px-4 py-2 chat-header">
+        <div className="d-flex flex-row align-items-center gap-3 px-4 py-2 chat-header text-no-selection">
             <div id="contactProfilePhoto">
                 {userChatData? <img src={`http://localhost:8080/${userChatData?.image.substring(5)}`} className="image" /> : null}
                 

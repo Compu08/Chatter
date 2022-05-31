@@ -13,7 +13,7 @@
 }
 
 body {
-  background-image: linear-gradient(180deg, #dfeadf, #d2dbd1);
+  background: linear-gradient(180deg, #dfeadf, #d2dbd1);
   color: white;
   font-family: 'Helvetica', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,11 +32,19 @@ a {
 
 #root {
   height: 100%;
+  width: 100%;
+}
+
+.rootDiv, .main-wrapper {
+  width: 100%;
+}
+
+footer{
+  color: var(--chatter-black);
 }
 
 footer div {
   opacity: 50%;
-  color: var(--chatter-black);
   font-size: 11px !important;
   padding-top: 5px !important;
   padding-bottom: 5px !important;
@@ -54,7 +62,24 @@ input:focus {
   outline: none;
 }
 
-/* ===== Scrollbar CSS ===== */
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 0 !important;
+  -webkit-text-fill-color: white !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--chatter-green) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Scrollbar CSS */
 /* Firefox */
 * {
   scrollbar-width: auto;
@@ -94,6 +119,12 @@ input:focus {
   font-weight: 600;
   font-style: italic;
   padding: 5px 20px;
+  transition: all 0.2s ease;
+}
+
+#register .btn-input-file:hover{
+  background-color: var(--chatter-blue); 
+  border: 2px solid var(--chatter-blue);
 }
 
 .text-chatter-green {
@@ -106,6 +137,10 @@ input:focus {
 
 .bg-chatter-gray {
   background-color: var(--chatter-gray);
+}
+
+.bg-chatter-black {
+  background-color: var(--chatter-black);
 }
 
 .bg-chats-background {
@@ -178,6 +213,19 @@ nav .nav-item {
   color: white;
 }
 
+nav .nav-item::after{
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: var(--chatter-green);
+  transition: width .5s;
+  margin-top: 5px;
+}
+nav .nav-item:hover::after{
+  width: 100%;
+}
+
 .active {
   color: var(--chatter-green) !important;
 }
@@ -215,7 +263,7 @@ nav .nav-item {
   z-index: 0;
 }
 
-.main-wrapper .left-side .content img{
+.main-wrapper .left-side .content img {
   z-index: 2;
 }
 
@@ -225,8 +273,6 @@ nav .nav-item {
   border: 0 !important;
   border-bottom: 1px solid white !important;
   font-style: italic;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
 .main-wrapper .right-side .form-control::placeholder {
@@ -276,14 +322,14 @@ nav .nav-item {
   border-top: 1px solid #e9edef;
 }
 
-#searchBar{
+#searchBar {
   border-bottom: 1px solid var(--chatter-gray-borders);
 }
 
 .searchBar {
   border-radius: 8px;
   background-color: var(--chatter-gray);
-  
+
 }
 
 .searchBar .search {
@@ -307,7 +353,7 @@ nav .nav-item {
   transition: all 0.2s ease;
 }
 
-.chatTab:first-child .chatInfo{
+.chatTab:first-child .chatInfo {
   border-top: none !important;
 }
 
@@ -352,7 +398,7 @@ nav .nav-item {
   font-size: 12px;
 }
 
-.chatsDiv{
+.chatsDiv {
   overflow-y: scroll;
 }
 
@@ -380,9 +426,9 @@ nav .nav-item {
 
 .chat-inside-box {
   z-index: 2;
-  }
+}
 
-.chat-message-time{
+.chat-message-time {
   font-size: 10px;
   align-self: flex-end;
 }
@@ -421,6 +467,7 @@ nav .nav-item {
   color: var(--chatter-text-color);
   font-size: 1rem;
   width: 150px;
+  top: 35px;
 }
 
 .scale1 {
@@ -450,28 +497,33 @@ nav .nav-item {
   background-color: #f5f6f6;
 }
 
-.iconHover{
+.iconHover {
   background: transparent;
   border-radius: 50%;
   padding: 5px;
   line-height: 1px;
 }
 
-.iconHover:hover{
-  background:rgba(255, 255, 255, 0.30);
+.iconHover:hover {
+  background: rgba(255, 255, 255, 0.30);
   transition: all 0.3s ease;
 }
 
-.search-result{
+.black-icon:hover{
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.search-result {
   position: relative;
 }
 
-.search-result .results{
+.search-result .results {
   position: absolute;
   background-color: var(--chatter-primary-background);
   box-shadow: 0 2px 5px 0 rgba(11, 20, 26, .26), 0 2px 10px 0 rgba(11, 20, 26, .16);
   top: 5px;
-  left:0;
+  left: 0;
   padding: 9px 0;
   width: 100%;
   height: auto;
@@ -485,12 +537,112 @@ nav .nav-item {
   overflow-y: scroll;
 }
 
-.search-result .results .result{
+.search-result .results .result {
   padding: 5px 8px;
   cursor: pointer;
   border-top: 1px solid #ddd;
 }
 
-.search-result .results .result:hover{
+.search-result .results .result:hover {
   background-color: #f5f6f6;
+}
+
+.division-line {
+  height: 1px;
+  width: 100%;
+}
+
+.empty-chat-line {
+  height: 10px;
+  width: 100%;
+  background-color: var(--chatter-green);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.text-no-selection {
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.scroll-y{
+  overflow-y: scroll;
+}
+
+/* Input Effect */ 
+.effect-5 ~ .focus-border{position: absolute; height: 36px; bottom: 0; left: 0; width: 0; transition: 0.4s;}
+.effect-5:focus ~ .focus-border{width: 100%; transition: 0.4s; border: 1px solid #fff;}
+.effect-5:focus{padding-left: 14px !important; transition: 0.4s;}
+.effect-5{border: 0; padding-left: 0px; border: 1px solid transparent; border-bottom-color: #ccc; transition: 0.4s;}
+
+/* Media Queries */
+@media (max-width: 1000px){
+  body{
+    background-attachment: fixed;
+    font-size: 14px;
+  }
+  .rootDiv{
+    overflow-y: scroll !important;
+    height: auto !important;
+  }
+  .brand-logo{
+    width: 150px;
+  }
+  .chat-left-side, .chat-right-side, .right-side, .left-side{
+    width:100% !important;
+  }
+  .chat-right-side img{
+    width: 60%;
+  }
+  .left-side .content{
+    padding: 20% !important;
+  }
+  .right-side{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10% 0 !important;
+  }
+
+  .right-side .content{
+    padding: 0 !important;
+    width: 80%;
+    justify-content: center;
+    align-items: center !important;
+    text-align: center;
+  }
+  
+  .empty-chats{
+    padding: 15% 0 !important;
+  }
+  .chatsDiv{
+    padding: 0 !important;
+    height: 500px;
+  }
+  .chatTab{
+    padding: 0 3% !important;
+  }
+  .profile-container{
+    padding-left: 2% !important;
+    padding-right: 2% !important;
+  }
+  .chat-screen{
+    height: 500px;
+  }
+  .navbar-light .navbar-toggler{
+    color: transparent ;
+  }
+  .navbar-toggler:focus{
+    box-shadow: none !important;
+  }
+  .navbar-toggler{
+    color: #fff !important;
+    font-weight: bold;
+    border: 0 !important;
+  }
 }

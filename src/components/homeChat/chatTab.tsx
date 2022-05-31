@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { IoCheckmarkDoneOutline } from 'react-icons/io5';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import deleteChat from '../../api/deleteChat';
-import client from '../../utils/client';
 import { ChatTabProps } from '../../utils/types';
 import useDeleteChat from '../../api/deleteChat';
+import ConfirmDialog from '../confirmDialog';
+import { getChats} from '../../redux/chatsSlice';
+import { useAppSelector } from '../../redux/hooks';
 
-function ChatTab({ name, time, photo, chatId, messages, lastMsg, userData, selectedChat, onClick }: ChatTabProps) {
+function ChatTab({ name, photo, chatId, messages, userData, selectedChat, onClick }: ChatTabProps) {
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const chats = useAppSelector(getChats);
 
     const deleteChat = useDeleteChat(userData.userId, chatId);
     const lastMessage = messages[0] ? (messages.slice(-1)[0].message).slice(0, 55) + "..." : "No hay mensajes.";
@@ -16,8 +21,12 @@ function ChatTab({ name, time, photo, chatId, messages, lastMsg, userData, selec
         deleteChat();
     }
 
+    const handleOpenModal = () => {
+        setIsOpen(true);
+    }
+
     return (
-        <div id="chatTab" className={selectedChat == chatId ? "chatTab d-flex flex-row justify-content-between px-3 cursor-default bg-chatter-green" : "chatTab d-flex flex-row justify-content-between px-3 cursor-default"} onClick={onClick}>
+        <div id="chatTab" className={selectedChat == chatId ? "chatTab d-flex flex-row justify-content-between px-3 cursor-pointer bg-chatter-green text-no-selection" : "chatTab d-flex flex-row justify-content-between px-3 cursor-pointer text-no-selection"} onClick={onClick}>
             <div className="d-flex flex-row gap-3 w-100 justify-content-center align-items-center">
                 <div className="chatPhoto">
                     <img src={`http://localhost:8080/${photo.substring(5)}`} alt="ProfilePhoto" className="image" />
@@ -41,9 +50,11 @@ function ChatTab({ name, time, photo, chatId, messages, lastMsg, userData, selec
                     </div>
                 </div>
             </div>
-            <div className="text-chatter-black chatTab-dots d-flex align-items-center" onClick={eraseChat}>
+            <div className="text-chatter-black chatTab-dots d-flex align-items-center" onClick={handleOpenModal}>
                 <BsThreeDotsVertical />
             </div>
+
+            <ConfirmDialog title="Eliminar chat" text="¿Está seguro que desea borrar la conversación?" handleOk={eraseChat} handleCancel={setIsOpen} isOpen={isOpen}/>
         </div>
     )
 }

@@ -4,16 +4,12 @@ import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 import { SearchBarProps } from '../utils/types';
 import React, { useState } from 'react';
 import { NotificationFailure } from './notifications';
+import { FILTER_QUERY } from '../utils/gql-querys';
+import { endpoint } from '../utils/gql-endpoint';
 
 function SearchBar({ userId, chatId }: SearchBarProps) {
 
     const [filter, setFilter] = useState<string>("");
-    const endpoint = "/graphql";
-    const FILTER_QUERY = `query filterMessage($userId: ID!, $chatId: ID!, $filter: String!) {
-        filterMessages(userId: $userId, chatId: $chatId, filter: $filter){
-            message
-        }
-    }`;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (chatId == "") {
@@ -38,8 +34,8 @@ function SearchBar({ userId, chatId }: SearchBarProps) {
 
             <div className="search-result">
                 <div className={filter != "" ? "results text-chatter-black scale1" : "results text-chatter-black"}>
-                    {result.data?.filterMessages.map( (message:any) => 
-                    <div className="result">{
+                    {result.data?.filterMessages.map( (message:any,i:any) => 
+                    <div className="result" key={i}>{
                         message.message.length > 1 ? message.message : message.message.length
                     }</div>
                     )}

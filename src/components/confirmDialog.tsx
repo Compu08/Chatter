@@ -1,10 +1,15 @@
 import { Modal } from "react-bootstrap";
 import { ConfirmDialogProps } from "../utils/types";
 
-function ConfirmDialog ({title,text,isOpen, handleNo, handleYes}:ConfirmDialogProps) {
+function ConfirmDialog ({title,text,isOpen, handleCancel, handleOk}:ConfirmDialogProps) {
    
     const closeDialog = () => {
-        handleNo(false);
+        handleCancel(false);
+    }
+
+    const handleConfirm = () => {
+        handleOk();
+        closeDialog();
     }
 
     return (
@@ -18,7 +23,7 @@ function ConfirmDialog ({title,text,isOpen, handleNo, handleYes}:ConfirmDialogPr
         </Modal.Body>
 
         <Modal.Footer className="justify-content-center">
-            <button className="btn btn-danger px-5" onClick={handleYes}>Si</button>
+            <button className="btn btn-danger px-5" onClick={handleConfirm}>Si</button>
             <button className="btn btn-secondary px-5" onClick={closeDialog}>No</button>
         </Modal.Footer>
     </Modal>

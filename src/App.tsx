@@ -18,7 +18,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div onClick={handleBodyClick} className="w-100 overflow-hidden h-100 d-flex flex-column align-content-center align-items-center justify-content-center">
+      <div onClick={handleBodyClick} className="rootDiv w-100 overflow-hidden h-100 d-flex flex-column align-content-center align-items-center justify-content-center">
         <Header />
         <AppRoutes />
         <Footer />

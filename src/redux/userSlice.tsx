@@ -27,11 +27,19 @@ export const userSlice = createSlice({
             state.lastName = action.payload.lastName;
             state.email = action.payload.email;
             state.photo = action.payload.photo;
+        },
+        setLogoutData: (state) => {
+            state.name = "";
+            state.lastName = "";
+            state.email = "";
+            state.photo = "";
+            state.userId = "";
+            state.authToken = "";
         }
     }
 })
 
-export const { setUserName, setLoginData, setUserData } = userSlice.actions;
+export const { setUserName, setLoginData, setUserData, setLogoutData } = userSlice.actions;
 
 export const getUser = (state: RootState) => state.user;
 

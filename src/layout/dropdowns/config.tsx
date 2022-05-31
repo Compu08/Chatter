@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from "react"
+import { EventHandler, MouseEventHandler, useState } from "react"
 import useDeleteUser from "../../api/deleteUser";
 import ConfirmDialog from "../../components/confirmDialog";
 import NewChatModal from "../../components/homeChat/newChatModal";
@@ -6,7 +6,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { getUser } from "../../redux/userSlice";
 import { UserDataState } from "../../utils/types";
 
-function ConfigDropdown(props:{getChatsData: any , userData:UserDataState, isOpen:Boolean, setIsOpen:any}){
+function ConfigDropdown(props:{getChatsData: any , userData:UserDataState, isOpen:Boolean}){
 
     const [delDialogIsOpen, setDelDialogIsOpen] = useState(false);
     const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
@@ -34,7 +34,7 @@ function ConfigDropdown(props:{getChatsData: any , userData:UserDataState, isOpe
             </ul>
 
             <NewChatModal isOpen={newChatModalIsOpen} setIsOpen={setNewChatModalIsOpen} userData={props.userData} getChatsData={props.getChatsData}/>
-            <ConfirmDialog title="Eliminar Usuario" text="¿Está seguro que desea eliminar la cuenta?" isOpen={delDialogIsOpen} handleNo={setDelDialogIsOpen} handleYes={handleConfirmDelete} />
+            <ConfirmDialog title="Eliminar Usuario" text="¿Está seguro que desea eliminar la cuenta?" isOpen={delDialogIsOpen} handleCancel={setDelDialogIsOpen} handleOk={handleConfirmDelete} />
         </div>
     )
 }

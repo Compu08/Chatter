@@ -47,7 +47,7 @@ function Register() {
     }
 
     return (
-        <div id="register" className="right-side d-flex flex-column justify-content-center w-50 bg-chatter-green h-100 py-4 fs-1 fw-bold">
+        <div id="register" className="right-side d-flex flex-column justify-content-center w-50 bg-chatter-green h-100 py-4 fs-1 fw-bold scroll-y">
             <Field
                 title="NOMBRE"
                 type="text"
@@ -72,7 +72,7 @@ function Register() {
                 onChange={handleInputChange}
             />
 
-            <div className="content d-flex flex-column mb-4">
+            <div className="content d-flex flex-column mb-4" data-aos="fade">
                 <span>FOTO DE PERFIL</span>
                 <label className="file">
                     <button className="btn btn-input-file" onClick={handleFileClick}>Seleccionar Archivo</button>
@@ -88,11 +88,11 @@ function Register() {
                 onChange={handleInputChange}
             />
 
-            <div className="content d-flex flex-column mb-3 d-flex align-items-start">
+            <div className="content d-flex flex-column mb-3 d-flex align-items-start" data-aos="fade">
                 <button className="btn btn-primary" onClick={handleRegister}>Registrarse</button>
             </div>
 
-            <div className="content text d-flex flex-row gap-2 fs-6 fst-italic">
+            <div className="content text d-flex flex-row gap-2 fs-6 fst-italic" data-aos="fade">
                 <span>¿Ya tienes una cuenta?</span>
                 <NavLink to="/login" className="text-chatter-blue">Inicia sesión aquí</NavLink>
             </div>

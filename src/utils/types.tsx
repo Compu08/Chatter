@@ -49,8 +49,6 @@ export interface MyProfileProps {
 
 export interface ChatTabProps {
     name: string,
-    lastMsg?: string,
-    time?: string,
     photo: string,
     chatId: string,
     messages: Array<Messages>,
@@ -81,7 +79,7 @@ export interface RegisterData {
 export interface ConfirmDialogProps{
     title: string,
     text: string,
-    handleYes?: any,
-    handleNo?: any,
+    handleOk?: any,
+    handleCancel?: any,
     isOpen: boolean,
 }

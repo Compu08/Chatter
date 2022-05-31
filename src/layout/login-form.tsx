@@ -50,11 +50,11 @@ function LoginForm() {
                 onChange={handleInputChange}
             />
 
-            <div className="content d-flex flex-column mb-5 d-flex align-items-start">
+            <div className="content d-flex flex-column mb-5 d-flex align-items-start" data-aos="fade">
                 <button type="submit" className="btn btn-primary" onClick={handleLogin}>Ingresar</button>
             </div>
 
-            <div className="content text d-flex flex-row gap-2 mb-5 fs-6 fst-italic">
+            <div className="content text d-flex flex-row gap-2 mb-5 fs-6 fst-italic" data-aos="fade">
                 <span>No tienes una cuenta?</span>
                 <NavLink to="/register" className="text-chatter-blue">Registrate aquí</NavLink>
             </div>

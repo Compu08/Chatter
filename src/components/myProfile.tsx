@@ -7,7 +7,7 @@ import { MyProfileProps } from "../utils/types";
 function MyProfile({name,lastName, email, photo}:MyProfileProps) {
 
     return (
-        <div className="myProfile d-flex flex-row gap-3 align-items-center">
+        <div className="myProfile d-flex flex-row gap-3 align-items-center text-no-selection">
             <div className="myProfilePhoto cursor-pointer" >
                 <img src={`http://localhost:8080/${photo?.substring(5)}`} alt="ProfilePhoto" className="image" />
             </div>
