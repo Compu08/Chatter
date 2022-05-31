@@ -1,3 +1,4 @@
+import { NotificationFailure, NotificationSuccess } from "../components/notifications";
 import { useAppSelector } from "../redux/hooks";
 import { getUser } from "../redux/userSlice";
 import client from "../utils/client";
@@ -12,9 +13,10 @@ const useDeleteChat = (userId: string, chatId: string) => {
                         "Authorization": `Basic ${userData.authToken}`
                     },
                 });
+            NotificationSuccess("¡Exito! Conversación eliminada");
         }
         catch (e: any) {
-            console.log(e.response.data.message);
+            NotificationFailure(e.response.data.message);
         }
     }
 

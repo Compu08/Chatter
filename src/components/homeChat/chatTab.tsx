@@ -6,19 +6,18 @@ import client from '../../utils/client';
 import { ChatTabProps } from '../../utils/types';
 import useDeleteChat from '../../api/deleteChat';
 
-function ChatTab({ name, time, photo, chatId, messages, lastMsg, userData, onClick }: ChatTabProps) {
+function ChatTab({ name, time, photo, chatId, messages, lastMsg, userData, selectedChat, onClick }: ChatTabProps) {
 
     const deleteChat = useDeleteChat(userData.userId, chatId);
     const lastMessage = messages[0] ? (messages.slice(-1)[0].message).slice(0, 55) + "..." : "No hay mensajes.";
-
-    console.log(lastMessage)
+    const lastMessageTime = messages[0] ? (messages.slice(-1)[0].timeDate).slice(11,16)+" p.m." : "";
 
     const eraseChat = () => {
         deleteChat();
     }
 
     return (
-        <div id="chatTab" className="chatTab d-flex flex-row justify-content-between px-3 cursor-default" onClick={onClick}>
+        <div id="chatTab" className={selectedChat == chatId ? "chatTab d-flex flex-row justify-content-between px-3 cursor-default bg-chatter-green" : "chatTab d-flex flex-row justify-content-between px-3 cursor-default"} onClick={onClick}>
             <div className="d-flex flex-row gap-3 w-100 justify-content-center align-items-center">
                 <div className="chatPhoto">
                     <img src={`http://localhost:8080/${photo.substring(5)}`} alt="ProfilePhoto" className="image" />
@@ -29,7 +28,7 @@ function ChatTab({ name, time, photo, chatId, messages, lastMsg, userData, onCli
                             {name}
                         </div>
                         <div className="chat-time text-chatter-black opacity-50 self-align-end">
-                            20:57am.
+                            {lastMessageTime}
                         </div>
                     </div>
                     <div className="chatPreview d-flex flex-row gap-1 align-items-center">

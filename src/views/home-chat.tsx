@@ -1,32 +1,24 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSmile, faPaperPlane } from "@fortawesome/free-regular-svg-icons";
-import { BiSearchAlt } from 'react-icons/bi';
 import { IoMdSettings } from 'react-icons/io';
 import React, { useEffect, useState, useRef, LegacyRef } from 'react';
 import NewChatModal from "../components/homeChat/newChatModal";
 import ChatTab from "../components/homeChat/chatTab";
 import MyProfile from "../components/myProfile";
 import useSendMsg from "../api/sendMsg";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { getUser } from "../redux/userSlice";
 import useGetUserData from "../api/getUser";
-import { Chat, UserDataState } from "../utils/types";
+import { Chat } from "../utils/types";
 import useGetChats from "../api/getChats";
-import { getChats } from "../redux/chatsSlice";
+import { getChats, setIsAllowedExpand } from "../redux/chatsSlice";
 import ChatMessages from "../components/homeChat/chatMessages";
 import ChatHeader from "../components/homeChat/chatHeader";
 import ConfigDropdown from "../layout/dropdowns/config";
+import SearchBar from "../components/searchBar";
+import { NotificationFailure } from "../components/notifications";
 
 function HomeChat() {
-
-    const initialState: UserDataState = {
-        name: "",
-        lastName: "",
-        email: "",
-        photo: "",
-        userId: "",
-        authToken: "",
-    }
 
     const chatHeaderInitialState: Chat = {
         messages: [],
@@ -36,14 +28,13 @@ function HomeChat() {
 
     }
 
-    const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
     const [msgEntry, setMsgEntry] = useState<string>("");
     const [selectedChat, setSelectedChat] = useState<string>("");
     const [userChatData, setUserChatData] = useState<Chat>(chatHeaderInitialState);
     const [configOpen, setConfigOpen] = useState<Boolean>(false);
     const ref = useRef<any>();
 
-    //const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
     const userData = useAppSelector(getUser);
     const chats = useAppSelector(getChats);
@@ -53,6 +44,8 @@ function HomeChat() {
 
     const sendMsg = useSendMsg(msgEntry, userData.userId, selectedChat);
 
+    const positionRef = useRef<any>();   
+
     useEffect(() => {
         data();
         getChatsData();
@@ -61,12 +54,10 @@ function HomeChat() {
     useEffect(() => {
         if (ref.current) {
             ref.current.scrollTop = ref.current.scrollHeight;
+            setConfigOpen(isOpen => isOpen && chats.isAllowedExpand);
+            positionRef.current.scrollIntoView();
         }
     }, [chats]);
-
-    const handleNewChatModal = () => {
-        setNewChatModalIsOpen(true);
-    }
 
     const handleMsgEntry = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMsgEntry(e.target.value);
@@ -78,7 +69,7 @@ function HomeChat() {
             sendMsg();
             getChatsData();
         }else{
-            console.log("¡Error! No puedes enviar un mensaje en blanco");
+            NotificationFailure("¡Error! No puedes enviar un mensaje en blanco");
         }
     }
 
@@ -91,8 +82,10 @@ function HomeChat() {
             handleSendMsg();
     }
 
-    const handleOpenConfig = () =>{
+    const handleOpenConfig = (e:React.MouseEvent<HTMLDivElement>) =>{
         setConfigOpen(!configOpen);
+        dispatch(setIsAllowedExpand(true));
+        e.stopPropagation();
     }
 
 
@@ -101,23 +94,18 @@ function HomeChat() {
             <div className="chat-left-side bg-chats-background d-flex flex-column w-30 p-0">
                 <div className="profile-container bg-chatter-green px-3 d-flex justify-content-between align-items-center py-2">
                     <MyProfile name={userData?.name} lastName={userData?.lastName} email={userData?.email} photo={userData?.photo} />
-                    <span className="cursor-pointer fs-3 position-relative" onClick={handleOpenConfig}>
+                    <span className="iconHover cursor-pointer fs-3 position-relative" onClick={handleOpenConfig}>
                         <IoMdSettings />
-                        <ConfigDropdown newChat={handleNewChatModal} isOpen={configOpen} />
+                        <ConfigDropdown isOpen={configOpen} userData={userData} getChatsData={getChatsData} setIsOpen={setConfigOpen} />
                     </span>
                 </div>
 
-                <div id="searchBar" className="d-flex flex-row px-4 my-3">
-                    <div className="searchBar w-100 py-1 px-3 d-flex flex-row gap-2 align-items-center">
-                        <BiSearchAlt className="fs-5 text-chatter-black opacity-25" />
-                        <input type="text" className="search py-1" placeholder="Buscar en los chats" />
-                    </div>
-                </div>
-
-                <div className="d-flex flex-grow-1 flex-column" ref={ref}>
-
+                <SearchBar userId={userData.userId} chatId={selectedChat} />
+                
+                <div className="chatsDiv d-flex flex-grow-1 flex-column" ref={ref}>
+                    <div ref={positionRef} />
                     {chats ? chats.chats.map((tab: any) => (
-                        <ChatTab name={tab.name} photo={tab.image} chatId={tab.chatId} messages={tab.messages} userData={userData} onClick={() => handleChatClick(tab.chatId)} />
+                        <ChatTab name={tab.name} photo={tab.image} chatId={tab.chatId} messages={tab.messages} userData={userData} selectedChat={selectedChat} onClick={() => handleChatClick(tab.chatId)} />
                     ))
                         :
                         null
@@ -130,7 +118,7 @@ function HomeChat() {
 
                 <ChatHeader userChatData={userChatData} />
 
-                <ChatMessages chatId={selectedChat} chatsData={chats} setUserChatData={setUserChatData} />
+                <ChatMessages chatId={selectedChat} chatsData={chats} setUserChatData={setUserChatData} />               
 
                 <div className="d-flex flex-row align-items-center justify-content-center bg-chatter-green px-4 py-2">
                     <div className="text-chatter-black fs-3 opacity-75">
@@ -141,13 +129,13 @@ function HomeChat() {
                         <input placeholder="Escribe tu mensaje" value={msgEntry} className="user-chat-input px-4 py-4 w-100 bg-white" onChange={handleMsgEntry} onKeyDown={handleEnterPress} disabled={selectedChat ? false : true} />
                     </div>
 
-                    <div className="text-chatter-black fs-3 opacity-75" onClick={handleSendMsg}>
+                    <div className="text-chatter-black fs-3 opacity-75 cursor-pointer" onClick={handleSendMsg}>
                         <FontAwesomeIcon icon={faPaperPlane} />
                     </div>
                 </div>
             </div>
 
-            <NewChatModal isOpen={newChatModalIsOpen} setIsOpen={setNewChatModalIsOpen} userData={userData} />
+            
         </div>
     )
 

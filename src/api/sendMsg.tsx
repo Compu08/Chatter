@@ -1,3 +1,4 @@
+import { NotificationFailure } from "../components/notifications";
 import { useAppSelector } from "../redux/hooks";
 import { getUser } from "../redux/userSlice";
 import client from "../utils/client";
@@ -10,10 +11,10 @@ const useSendMsg = (msg: string, userId: string, chatId: string) => {
                 headers: {
                     "Authorization": `Basic ${userData.authToken}`
                 }
-            }).then( (response) => console.log(response));
+            });
         }
         catch (e: any) {
-            console.log(e.response.data.message);
+            NotificationFailure(e.response.data.message);
         }
     }
 

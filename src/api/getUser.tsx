@@ -2,6 +2,7 @@ import client from "../utils/client";
 import { useAppDispatch } from '../redux/hooks';
 import { UserDataState } from "../utils/types";
 import { setUserData } from "../redux/userSlice";
+import { NotificationFailure } from "../components/notifications";
 
 const useGetUserData = (userId: string) => {
   const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ const useGetUserData = (userId: string) => {
       await dispatch(setUserData(userData));
     }
     catch (e:any) {
-      console.log(e.response.data.message);
+      NotificationFailure(e.response.data.message);
     }
   }
   return getDataQuery;

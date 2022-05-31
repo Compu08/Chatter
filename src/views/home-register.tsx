@@ -1,5 +1,5 @@
 import RegisterForm from '../layout/register-form';
-import MainLeftSide from '../layout/main-left-side';
+import MainLeftSide from './main-left-side';
 import LoginForm from '../layout/login-form';
 
 function Home() {

@@ -3,6 +3,7 @@ import { UserDataState } from "../utils/types";
 import { useAppDispatch } from '../redux/hooks';
 import { setLoginData } from '../redux/userSlice';
 import { useNavigate } from "react-router-dom";
+import { NotificationFailure, NotificationSuccess } from "../components/notifications";
 
 const useLogIn = (data: FormData) => {
   const dispatch = useAppDispatch();
@@ -14,11 +15,12 @@ const useLogIn = (data: FormData) => {
         authToken: apiData.token,
         userId: apiData.userId,
       };
+      NotificationSuccess("¡Exito! Bienvenido a Chatter");
       await dispatch(setLoginData(userData));
       navigate("/chat");
     }
     catch (e:any) {
-      console.log(e.response.data.message);
+      NotificationFailure(e.response.data.message);
     }
   };
 

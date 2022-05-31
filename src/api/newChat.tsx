@@ -1,3 +1,4 @@
+import { NotificationFailure, NotificationSuccess } from "../components/notifications";
 import { useAppSelector } from "../redux/hooks";
 import { getUser } from "../redux/userSlice";
 import client from "../utils/client";
@@ -12,9 +13,11 @@ const useAddChat = (user: string, data: FormData) => {
                     "Authorization": `Basic ${userData.authToken}`
                 },
             })
+            
+            NotificationSuccess("¡Exito! Nueva conversación creada");
         }
         catch (e: any) {
-            console.log(e.response.data.message);
+            NotificationFailure(e.response.data.message);
         }
     }
 

@@ -1,5 +1,6 @@
 import client from "../utils/client";
 import { useNavigate } from "react-router-dom";
+import { NotificationFailure, NotificationSuccess } from "../components/notifications";
 
 const useRegister = (data: FormData) => {
     const navigate = useNavigate();
@@ -10,10 +11,11 @@ const useRegister = (data: FormData) => {
                     "Content-Type": "multipart/form-data",
                 },
             });
+            NotificationSuccess("¡Exito! Nueva cuenta registrada")
             navigate("/login")
         }
         catch (e:any){
-            console.log(e.response.data.message);
+            NotificationFailure(e.response.data.message);
         }
     };
 

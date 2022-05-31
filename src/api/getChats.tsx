@@ -1,4 +1,5 @@
 import { useDispatch } from "react-redux";
+import { NotificationFailure } from "../components/notifications";
 import { getChats, setChatsData } from "../redux/chatsSlice";
 import { useAppSelector } from "../redux/hooks";
 import { getUser } from "../redux/userSlice";
@@ -6,7 +7,6 @@ import client from "../utils/client";
 
 const useGetChats = (userId: string) => {
     const userData = useAppSelector(getUser);
-    const chatsData = useAppSelector(getChats);
     const dispatch = useDispatch();
     const getChatsQuery = async () => {
         try {
@@ -19,7 +19,8 @@ const useGetChats = (userId: string) => {
             await dispatch(setChatsData(chatsQuery.chats));
         }
         catch (e: any) {
-            console.log(e.response.data.message);
+            NotificationFailure(e.response.data.message);
+            
         }
     }
     

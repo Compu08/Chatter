@@ -5,7 +5,7 @@ import {useState} from 'react';
 import {ChatModalProps} from '../../utils/types';
 import useAddChat from "../../api/newChat";
 
-function NewChatModal({isOpen, setIsOpen, userData}: ChatModalProps) {
+function NewChatModal({isOpen, setIsOpen, userData, getChatsData}: ChatModalProps) {
 
     const [selectedImage, setSelectedImage] = useState<any | null>(null);
     const [newChatName, setNewChatName] = useState<any | null>();
@@ -16,7 +16,7 @@ function NewChatModal({isOpen, setIsOpen, userData}: ChatModalProps) {
     const createChat = () => {
         data.append("name", newChatName);
         data.append("image", selectedImage);
-        addChat();
+        addChat().then( () => getChatsData()).then(() => handleClose() );
     }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,19 +34,19 @@ function NewChatModal({isOpen, setIsOpen, userData}: ChatModalProps) {
     }
 
     return(
-        <Modal show={isOpen}>
-        <Modal.Header closeButton>
+        <Modal className="text-chatter-black" show={isOpen} centered>
+        <Modal.Header className="justify-content-center">
             <Modal.Title>Agregar Nuevo Chat</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>
-            <input type="text" placeholder="Ingrese Nombre y Apellido" onChange={handleNameChange} />
-            <input type="file" placeholder="Subir foto de perfil" onChange={handleImageChange} />
+        <Modal.Body className="justify-content-center text-center">
+            <input type="text" placeholder="Ingrese Nombre y Apellido" className="form-control mb-3" onChange={handleNameChange} />
+            <input type="file" placeholder="Subir foto de perfil" className="form-control" onChange={handleImageChange} />
         </Modal.Body>
 
-        <Modal.Footer>
-            <button className="btn btn-secondary" onClick={handleClose}>Cerrar</button>
-            <button className="btn btn-primary" onClick={createChat}>Agregar</button>
+        <Modal.Footer className="justify-content-center">
+            <button className="btn btn-green bg-chatter-blue text-white px-4" onClick={createChat}>Agregar</button>
+            <button className="btn btn-secondary px-4" onClick={handleClose}>Cerrar</button>
         </Modal.Footer>
     </Modal>
     )

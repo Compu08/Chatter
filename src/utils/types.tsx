@@ -12,6 +12,7 @@ export interface UserDataState {
 
 export interface ChatsState {
     chats: Array<Chat>,
+    isAllowedExpand: boolean,
 }
 
 export interface Chat{
@@ -34,6 +35,11 @@ export interface Messages{
     timeDate: string,
 }
 
+export interface SearchBarProps{
+    userId: string,
+    chatId: string,
+}
+
 export interface MyProfileProps {
     name?: string,
     lastName?: string,
@@ -49,6 +55,7 @@ export interface ChatTabProps {
     chatId: string,
     messages: Array<Messages>,
     userData: UserDataState,
+    selectedChat:string,
     onClick?:MouseEventHandler<HTMLDivElement>,
 }
 
@@ -56,6 +63,7 @@ export interface ChatModalProps {
     isOpen: boolean,
     setIsOpen: Function,
     userData: UserDataState,
+    getChatsData: any,
 }
 
 export interface LoginData {
@@ -68,4 +76,12 @@ export interface RegisterData {
     lastName: string,
     email: string,
     password: string,
+}
+
+export interface ConfirmDialogProps{
+    title: string,
+    text: string,
+    handleYes?: any,
+    handleNo?: any,
+    isOpen: boolean,
 }
