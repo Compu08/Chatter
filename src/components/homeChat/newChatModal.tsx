@@ -1,55 +1,73 @@
-import { Modal } from "react-bootstrap";
-import client from "../../utils/client";
-import newChat from "../../api/newChat";
-import {useState} from 'react';
-import {ChatModalProps} from '../../utils/types';
-import useAddChat from "../../api/newChat";
+import { Modal } from 'react-bootstrap';
+import { useState } from 'react';
+import FormData from 'form-data';
 
-function NewChatModal({isOpen, setIsOpen, userData, getChatsData}: ChatModalProps) {
+import { ChatModalProps } from '../../types/chat';
 
-    const [selectedImage, setSelectedImage] = useState<any | null>(null);
-    const [newChatName, setNewChatName] = useState<any | null>();
+function NewChatModal(chatModalProps: ChatModalProps) {
+  const { isOpen, setIsOpen } = chatModalProps;
 
-    const data = new FormData();
-    const addChat = useAddChat(userData.userId, data);
+  const [selectedImage, setSelectedImage] = useState<any | null>(null);
+  const [newChatName, setNewChatName] = useState<any | null>();
 
-    const createChat = () => {
-        data.append("name", newChatName);
-        data.append("image", selectedImage);
-        addChat().then( () => getChatsData()).then(() => handleClose() );
+  const data = new FormData();
+
+  const createChat = () => {
+    data.append('name', newChatName);
+    data.append('image', selectedImage);
+    /*
+        TODO:
+        1. Create new chat and
+        2. Update the chats queue with getChatsData to display it
+        3. Close the popup with handleClose
+    */
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files != null) {
+      setSelectedImage(e.target.files[0]);
     }
+  };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files != null){
-            setSelectedImage(e.target.files[0]);
-        }
-    }
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewChatName(e.target.value);
+  };
 
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewChatName(e.target.value)
-    }
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
-    const handleClose = () => {
-        setIsOpen(false);
-    }
+  return (
+    <Modal className="text-chatter-black" show={isOpen} centered>
+      <Modal.Header className="justify-content-center">
+        <Modal.Title>Agregar Nuevo Chat</Modal.Title>
+      </Modal.Header>
 
-    return(
-        <Modal className="text-chatter-black" show={isOpen} centered>
-        <Modal.Header className="justify-content-center">
-            <Modal.Title>Agregar Nuevo Chat</Modal.Title>
-        </Modal.Header>
+      <Modal.Body className="justify-content-center text-center">
+        <input
+          type="text"
+          placeholder="Ingrese Nombre y Apellido"
+          className="form-control mb-3"
+          onChange={handleNameChange}
+        />
+        <input
+          type="file"
+          placeholder="Subir foto de perfil"
+          className="form-control"
+          onChange={handleImageChange}
+        />
+      </Modal.Body>
 
-        <Modal.Body className="justify-content-center text-center">
-            <input type="text" placeholder="Ingrese Nombre y Apellido" className="form-control mb-3" onChange={handleNameChange} />
-            <input type="file" placeholder="Subir foto de perfil" className="form-control" onChange={handleImageChange} />
-        </Modal.Body>
-
-        <Modal.Footer className="justify-content-center">
-            <button className="btn btn-green bg-chatter-blue text-white px-4" onClick={createChat}>Agregar</button>
-            <button className="btn btn-secondary px-4" onClick={handleClose}>Cerrar</button>
-        </Modal.Footer>
+      <Modal.Footer className="justify-content-center">
+        <button className="btn btn-green bg-chatter-blue text-white px-4" onClick={createChat}>
+          Agregar
+        </button>
+        <button className="btn btn-secondary px-4" onClick={handleClose}>
+          Cerrar
+        </button>
+      </Modal.Footer>
     </Modal>
-    )
+  );
 }
 
 export default NewChatModal;

@@ -1,62 +1,154 @@
 import { useState } from 'react';
+import styled from 'styled-components';
+
 import { IoCheckmarkDoneOutline } from 'react-icons/io5';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { ChatTabProps } from '../../utils/types';
-import useDeleteChat from '../../api/deleteChat';
-import ConfirmDialog from '../confirmDialog';
-import { getChats} from '../../redux/chatsSlice';
-import { useAppSelector } from '../../redux/hooks';
+import { ChatTabProps } from '../../types/chat';
+import ConfirmDialog from '../ConfirmDialog';
 
-function ChatTab({ name, photo, chatId, messages, userData, selectedChat, onClick }: ChatTabProps) {
+const Container = styled.div<{ isSelected: boolean }>`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 6px;
+  cursor: pointer;
+  user-select: none;
+  background: ${(props) => (props.isSelected ? '#36dd81' : '#fff')};
+  transition: all 0.2s ease;
 
-    const [isOpen, setIsOpen] = useState(false);
+  &:first-child .chatInfo {
+    border-top: none !important;
+  }
+  &:hover {
+    background-color: #dddddd6e;
+  }
+  &:hover .dots {
+    opacity: 50%;
+    cursor: pointer;
+  }
+`;
 
-    const chats = useAppSelector(getChats);
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 
-    const deleteChat = useDeleteChat(userData.userId, chatId);
-    const lastMessage = messages[0] ? (messages.slice(-1)[0].message).slice(0, 55) + "..." : "No hay mensajes.";
-    const lastMessageTime = messages[0] ? (messages.slice(-1)[0].timeDate).slice(11,16)+" p.m." : "";
+const ChatPhoto = styled.div`
+  & .image {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ddd;
+  }
+`;
 
-    const eraseChat = () => {
-        deleteChat();
-    }
+const ChatInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0px;
+  width: 100%;
+  border-top: 1px solid #e9edef;
+`;
 
-    const handleOpenModal = () => {
-        setIsOpen(true);
-    }
+const ChatInfoWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
-    return (
-        <div id="chatTab" className={selectedChat == chatId ? "chatTab d-flex flex-row justify-content-between px-3 cursor-pointer bg-chatter-green text-no-selection" : "chatTab d-flex flex-row justify-content-between px-3 cursor-pointer text-no-selection"} onClick={onClick}>
-            <div className="d-flex flex-row gap-3 w-100 justify-content-center align-items-center">
-                <div className="chatPhoto">
-                    <img src={`http://localhost:8080/${photo.substring(5)}`} alt="ProfilePhoto" className="image" />
-                </div>
-                <div className="chatInfo d-flex flex-column py-2 w-100">
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div className="chatContact text-chatter-black fw-bold">
-                            {name}
-                        </div>
-                        <div className="chat-time text-chatter-black opacity-50 self-align-end">
-                            {lastMessageTime}
-                        </div>
-                    </div>
-                    <div className="chatPreview d-flex flex-row gap-1 align-items-center">
-                        <div className="iconStatus text-primary">
-                            <IoCheckmarkDoneOutline />
-                        </div>
-                        <div className="msgPreview text-chatter-black fs-smaller opacity-50">
-                            {lastMessage}
-                        </div>
-                    </div>
-                </div>
+const Name = styled.div`
+  font-weight: 700;
+  color: #101111;
+`;
+
+const LastMessageTime = styled.div`
+  font-size: 12px;
+  color: #101111;
+  opacity: 50%;
+  align-self: end;
+`;
+
+const ChatPreview = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  align-items: center;
+`;
+
+const MessagePreview = styled.div`
+  font-size: 10px;
+  opacity: 50%;
+  color: #101111;
+`;
+
+const ChatTabDots = styled.div`
+  color: #101111;
+  display: flex;
+  align-items: center;
+  opacity: 0%;
+`;
+
+function ChatTab(chatTabProps: ChatTabProps) {
+  const { name, photo, chatId, messages, selectedChat, onClick } = chatTabProps;
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const lastMessage = messages[0]
+    ? messages.slice(-1)[0].message.slice(0, 55) + '...'
+    : 'No hay mensajes.';
+  const lastMessageTime = messages[0] ? messages.slice(-1)[0].timeDate.slice(11, 16) + ' p.m.' : '';
+
+  const eraseChat = () => {
+    /* 
+      TODO: 
+      1. Delete the chat
+    */
+  };
+
+  const handleOpenModal = () => {
+    setIsOpen(true);
+  };
+
+  return (
+    <Container id="chatTab" isSelected={selectedChat === chatId} onClick={onClick}>
+      <Wrapper>
+        <ChatPhoto>
+          <img
+            src={`http://localhost:8080/${photo.substring(5)}`}
+            alt="ProfilePhoto"
+            className="image"
+          />
+        </ChatPhoto>
+        <ChatInfo>
+          <ChatInfoWrapper>
+            <Name>{name}</Name>
+            <LastMessageTime>{lastMessageTime}</LastMessageTime>
+          </ChatInfoWrapper>
+          <ChatPreview>
+            <div>
+              <IoCheckmarkDoneOutline />
             </div>
-            <div className="text-chatter-black chatTab-dots d-flex align-items-center" onClick={handleOpenModal}>
-                <BsThreeDotsVertical />
-            </div>
+            <MessagePreview>{lastMessage}</MessagePreview>
+          </ChatPreview>
+        </ChatInfo>
+      </Wrapper>
+      <ChatTabDots className="dots" onClick={handleOpenModal}>
+        <BsThreeDotsVertical />
+      </ChatTabDots>
 
-            <ConfirmDialog title="Eliminar chat" text="¿Está seguro que desea borrar la conversación?" handleOk={eraseChat} handleCancel={setIsOpen} isOpen={isOpen}/>
-        </div>
-    )
+      <ConfirmDialog
+        title="Eliminar chat"
+        text="¿Está seguro que desea borrar la conversación?"
+        handleOk={eraseChat}
+        handleCancel={setIsOpen}
+        isOpen={isOpen}
+      />
+    </Container>
+  );
 }
 
 export default ChatTab;

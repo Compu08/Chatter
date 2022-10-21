@@ -1,10 +1,38 @@
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { toast } from 'react-toastify';
 
-Notify.init({
-    position: 'center-top',
-    clickToClose: true,
+export const NotificationSuccess = (text: string) => {
+  return toast.success(text, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
     pauseOnHover: true,
-})
-export const NotificationSuccess = (text:string) => {Notify.success(text)};
-export const NotificationFailure = (text:string) => {Notify.failure(text)};
-export const NotificationWarning = (text:string) => {Notify.warning(text)};
+    draggable: true,
+    progress: undefined,
+    theme: 'colored'
+  });
+};
+export const NotificationFailure = (text: string) => {
+  return toast.error(text, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'colored'
+  });
+};
+export const NotificationWarning = (text: string) => {
+  return toast.warning(text, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'colored'
+  });
+};

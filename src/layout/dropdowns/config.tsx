@@ -1,42 +1,56 @@
-import { EventHandler, MouseEventHandler, useState } from "react"
-import useDeleteUser from "../../api/deleteUser";
-import ConfirmDialog from "../../components/confirmDialog";
-import NewChatModal from "../../components/homeChat/newChatModal";
-import { useAppSelector } from "../../redux/hooks";
-import { getUser } from "../../redux/userSlice";
-import { UserDataState } from "../../utils/types";
+import { useState } from 'react';
+import ConfirmDialog from '../../components/ConfirmDialog';
+import NewChatModal from '../../components/HomeChat/NewChatModal';
+import { DropDownProps } from '../../types/chat';
 
-function ConfigDropdown(props:{getChatsData: any , userData:UserDataState, isOpen:Boolean}){
+function ConfigDropdown(dropDownProps: DropDownProps) {
+  const { getChatsData, userData, isOpen } = dropDownProps;
 
-    const [delDialogIsOpen, setDelDialogIsOpen] = useState(false);
-    const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
+  const [delDialogIsOpen, setDelDialogIsOpen] = useState(false);
+  const [newChatModalIsOpen, setNewChatModalIsOpen] = useState(false);
 
-    const userData = useAppSelector(getUser);
-    const delUser = useDeleteUser(userData.userId);
+  const handleDeleteUser = () => {
+    setDelDialogIsOpen(true);
+  };
 
-    const handleDeleteUser = () => {
-        setDelDialogIsOpen(true);
-    }
-    
-    const handleNewChatModal = () => {
-        setNewChatModalIsOpen(true);
-    }
+  const handleNewChatModal = () => {
+    setNewChatModalIsOpen(true);
+  };
 
-    const handleConfirmDelete = () => {
-        delUser();
-    }
+  const handleConfirmDelete = () => {
+    /* 
+      TODO: 
+      1. Get the current user data 
+      2. Delete the user 
+    */
+  };
 
-    return(
-        <div className={props.isOpen ? "configDropdown scale1" : "configDropdown"}>
-            <ul>
-                <li onClick={handleNewChatModal}><div>Nuevo chat</div></li>
-                <li onClick={handleDeleteUser}><div>Eliminar cuenta</div></li>
-            </ul>
+  return (
+    <div className={isOpen ? 'configDropdown scale1' : 'configDropdown'}>
+      <ul>
+        <li onClick={handleNewChatModal}>
+          <div>Nuevo chat</div>
+        </li>
+        <li onClick={handleDeleteUser}>
+          <div>Eliminar cuenta</div>
+        </li>
+      </ul>
 
-            <NewChatModal isOpen={newChatModalIsOpen} setIsOpen={setNewChatModalIsOpen} userData={props.userData} getChatsData={props.getChatsData}/>
-            <ConfirmDialog title="Eliminar Usuario" text="¿Está seguro que desea eliminar la cuenta?" isOpen={delDialogIsOpen} handleCancel={setDelDialogIsOpen} handleOk={handleConfirmDelete} />
-        </div>
-    )
+      <NewChatModal
+        isOpen={newChatModalIsOpen}
+        setIsOpen={setNewChatModalIsOpen}
+        userData={userData}
+        getChatsData={getChatsData}
+      />
+      <ConfirmDialog
+        title="Eliminar Usuario"
+        text="¿Está seguro que desea eliminar la cuenta?"
+        isOpen={delDialogIsOpen}
+        handleCancel={setDelDialogIsOpen}
+        handleOk={handleConfirmDelete}
+      />
+    </div>
+  );
 }
 
-export default ConfigDropdown
+export default ConfigDropdown;

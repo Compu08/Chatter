@@ -9,7 +9,11 @@
 /coverage
 
 # production
-/build
+/dist
+
+# Next.js build output
+.next
+out
 
 # misc
 .DS_Store

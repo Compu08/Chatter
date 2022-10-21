@@ -1,24 +1,63 @@
 import { BsPaperclip } from 'react-icons/bs';
-import { Chat } from '../../utils/types';
+import styled from 'styled-components';
+import { Chat } from '../../types/chat';
 
-function ChatHeader({userChatData}:{userChatData:Chat}) {
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 8px;
+  user-select: none;
+  box-shadow: 0px 15px 6px -4px rgba(0, 0, 0, 0.86);
+  border-bottom: 1px solid #d1d7db;
+  min-height: 78px;
+`;
 
-    return (
-        <div className="d-flex flex-row align-items-center gap-3 px-4 py-2 chat-header text-no-selection">
-            <div id="contactProfilePhoto">
-                {userChatData? <img src={`http://localhost:8080/${userChatData?.image.substring(5)}`} className="image" /> : null}
-                
-            </div>
-            <div id="contactName" className="bg-chatter-gray fw-bold text-chatter-blue fs-5">
-                {userChatData?.name}
-            </div>
-            <div className="d-flex flex-grow-1 justify-content-end">
-                <div id="attach" className="text-chatter-black clip-rotation fs-3 opacity-50">
-                    <BsPaperclip />
-                </div>
-            </div>
-        </div>
-    )
+const ProfilePhoto = styled.div``;
+
+const ContactName = styled.div`
+  font-weight: 700;
+  font-size: 17px;
+  color: #083045;
+  background: #e8e8e8;
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: end;
+`;
+
+const IconWrapper = styled.div`
+  font-size: 15px;
+  opacity: 50%;
+  transform: rotate(30deg);
+  color: #101111;
+`;
+
+function ChatHeader(userChatData: Chat) {
+  const { image, name } = userChatData;
+
+  return (
+    <Container>
+      <ProfilePhoto>
+        {name && image ? (
+          <img
+            src={`http://localhost:8080/${image?.substring(5)}`}
+            className="image"
+            alt="UserImage"
+          />
+        ) : null}
+      </ProfilePhoto>
+      <ContactName>{name}</ContactName>
+      <IconContainer>
+        <IconWrapper>
+          <BsPaperclip />
+        </IconWrapper>
+      </IconContainer>
+    </Container>
+  );
 }
 
 export default ChatHeader;
